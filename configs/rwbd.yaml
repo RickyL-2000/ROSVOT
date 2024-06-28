@@ -1,0 +1,48 @@
+base_config:
+  - ./base.yaml
+  - ./rosvot.yaml
+
+task_cls: tasks.rosvot.task.RobustWordbdTask
+
+conformer_kernel: 9
+updown_rates: 2-2-2
+channel_multiples: 1-1-1
+bkb_net: conformer
+bkb_layers: 2
+unet_skip_layer: false
+
+# word bd
+word_bd_threshold: 0.9
+word_bd_min_gap: 90  # ms
+min_word_dur: 20  # ms
+#word_bd_ref_min_gap: 40    # ms. note_bd_ref_min_gap <= note_bd_min_gap / 2
+use_soft_word_bd: true
+soft_word_bd_func: "gaussian:80"
+word_bd_ratio: 2.2  # the avg number of note bd in 1 sec
+word_bd_add_noise: gaussian:0.002 # gaussian|none
+word_bd_start: 0
+word_bd_temperature: 0.2
+word_bd_focal_loss: 5.0   # the gamma value. [gamma]|none
+
+lambda_word_bd: 1.0
+lambda_word_bd_focal: 3.0
+
+use_mel_bins: 40
+frames_multiple: 8
+
+lr: 0.000005
+scheduler: step_lr
+scheduler_lr_step_size: 500
+
+max_updates: 40000
+max_tokens: 80000
+max_sentences: 128
+val_check_interval: 500
+save_best: true
+num_valid_plots: 10
+num_valid_stats: 100
+accumulate_grad_batches: 1
+find_unused_parameters: true
+pin_memory: true
+ds_workers: 8
+

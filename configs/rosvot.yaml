@@ -1,0 +1,135 @@
+base_config:
+  - ./base.yaml
+
+# This dataset configuration below is for M4Singer. Feel free to change to other datasets.
+raw_data_dir: ''
+processed_data_dir: data/processed/m4
+binary_data_dir: data/binary/m4
+metafile_path: data/processed/m4/metadata.json
+ds_names: m4    # ds_names during binarizing, not necessary during training
+ds_names_in_training: ''  # default: '', means all in training   ';' separated
+ds_names_in_testing: ''   # default: '', means all in testing
+noise_data_dir: data/binary/musan_24k
+
+binarizer_cls: data_gen.rosvot_binarizer.RosvotBinarizer
+binarization_args:
+  with_wav: true
+  with_mel: false
+
+test_prefixes: [
+  "Alto-3",
+  "Alto-6#白羊",
+  "Alto-7#此生不换",
+  "Bass-1#半夏",
+  "Bass-2#DEAR JOHN",
+  "Bass-3#匆匆那年",
+  "Soprano-2#蒲公英的约定",
+  "Soprano-3#爱的供养",
+  "Tenor-3#K歌之王",
+  "Tenor-4",
+  "Tenor-6#阿楚姑娘"
+]
+
+audio_sample_rate: 24000
+fft_size: 512  # Extra window size is filled with 0 paddings to match this parameter
+win_size: 512
+hop_size: 128
+fmin: 30
+fmax: 12000
+f0_min: 50
+f0_max: 900
+dropout: 0.1
+hidden_size: 256
+
+task_cls: tasks.rosvot.task.MidiExtractorTask
+
+###########
+# model related params
+###########
+model: rosvot
+conformer_kernel: 9
+updown_rates: 2-2-2-2
+channel_multiples: 1-1-1-1
+bkb_net: conformer   # conv|conformer|transformer|wavenet
+bkb_layers: 2
+unet_skip_layer: false
+
+###########
+# note prediction related hparams
+###########
+# f0
+f0_add_noise: gaussian:0.04  # gaussian:0.04
+# pitch
+pe: rmvpe  # rmvpe|parselmouth|pw
+pe_ckpt: checkpoints/rmvpe/model.pt
+f0_bin: 512
+f0_filepath: ''
+pitch_type: frame
+use_pitch_embed: true
+use_soft_note: false
+note_start: 30
+note_num: 85
+note_pitch_label_smoothing: 0.005
+note_pitch_start: 0
+note_pitch_temperature: 0.01
+pitch_attn_num_head: 4
+# note bd
+min_note_dur: 80  # ms
+note_bd_threshold: 0.8
+note_bd_min_gap: 90  # ms
+note_bd_ref_min_gap: 40    # ms. note_bd_ref_min_gap <= note_bd_min_gap / 2
+use_soft_note_bd: true
+soft_note_bd_func: gaussian:80
+note_bd_ratio: 2.42312  # the avg number of note bd in 1 sec
+note_bd_add_noise: gaussian:0.002 # gaussian|none
+note_bd_start: 0
+note_bd_temperature: 0.2
+note_bd_focal_loss: 5.0   # the gamma value. [gamma]|none
+# lambdas
+lambda_note_bd: 1.0
+lambda_note_pitch: 1.0
+lambda_note_bd_focal: 3.0
+lambda_note_bd_slur_punish: 0.0   # punish the over fractured note, such as slurs (or reduce label_pos_weight_decay)
+
+label_pos_weight_decay: 0.95
+
+###########
+# noise
+###########
+noise_snr: 6-20
+noise_prob: 0.8
+noise_in_test: false
+
+use_mel: true
+use_mel_bins: 40
+use_wav: false
+use_wbd: true
+min_word_dur: 20  # ms
+mel_add_noise: gaussian:0.05 # gaussian|none|musan
+frames_multiple: 16
+dataset_downsample_rate: 1.0
+
+lr: 0.00001
+scheduler: step_lr
+scheduler_lr_step_size: 500
+warmup_updates: 0
+
+max_epochs: 1000
+max_updates: 60000
+max_tokens: 60000
+max_sentences: 32
+val_check_interval: 1000
+save_best: true
+num_valid_plots: 10
+num_valid_stats: 100
+accumulate_grad_batches: 1
+find_unused_parameters: true
+pin_memory: true
+ds_workers: 8
+
+# inference
+input_process_name: none
+save_plot: true
+infer_meta_path: ''
+infer_regulate_real_note_itv: true
+infer_print_skipped: true

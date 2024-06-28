@@ -1,0 +1,10 @@
+audio_sample_rate: 24000
+raw_data_dir: YOUR-PATH-TO-MUSAN-DIRECTORY
+binary_data_dir: data/binary/musan_24k
+binarization_args:
+  with_wav: true
+  with_mel: false
+valid_ratio: 0.1
+test_ratio: 0.1
+
+binarizer_cls: data_gen.musan_binarizer.MUSANBinarizer
