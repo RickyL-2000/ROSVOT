@@ -1,6 +1,6 @@
-# ROSVOT: Robust Singing Voice Transcription and MIDI Extraction
+# ROSVOT: Robust Singing Transcription and MIDI Extraction
 
-[![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2305.04476)
+[![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2405.09940)
 
 This is the official PyTorch implementation of [ROSVOT (ACL'24)](https://arxiv.org/abs/2405.09940), the first robust automatic singing voice transcription (AST) model that serves singing voice synthesis (SVS). We provide the original design and implementation of this method, along with the model weights. **We are still working on this project, feel free to create an issue if you find any problems.** 
 
