@@ -3,8 +3,6 @@ import numpy as np
 import wave
 import soundfile as sf
 
-from utils.audio.vad import trim_long_silences
-
 
 def librosa_pad_lr(x, fsize, fshift, pad_sides=1):
     '''compute right padding (final frame) or both sides padding (first and final frames)
@@ -49,6 +47,7 @@ def librosa_wav2spec(wav_path,
     import pyloudnorm as pyln
     if isinstance(wav_path, str):
         if trim_long_sil:
+            from utils.audio.vad import trim_long_silences
             wav, _, _ = trim_long_silences(wav_path, sample_rate)
         else:
             wav, _ = librosa.core.load(wav_path, sr=sample_rate)

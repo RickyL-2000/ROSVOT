@@ -30,7 +30,7 @@ from utils.audio.pitch_utils import norm_interp_f0, denorm_f0, f0_to_coarse, bou
 from modules.pe.rmvpe import RMVPE
 from data_gen.rosvot_binarizer import align_word
 from tasks.rosvot.dataset import get_mel_len
-from tasks.rosvot.task import bd_to_durs, regulate_real_note_itv, regulate_ill_slur
+from tasks.rosvot.rosvot_utils import bd_to_durs, regulate_real_note_itv, regulate_ill_slur
 from modules.rosvot.rosvot import MidiExtractor, WordbdExtractor
 
 

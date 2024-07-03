@@ -2,12 +2,12 @@ import re
 
 import torch
 import numpy as np
-from textgrid import TextGrid
 
 from utils.text.text_encoder import is_sil_phoneme
 
 
 def get_mel2ph(tg_fn, ph, mel, hop_size, audio_sample_rate, min_sil_duration=0):
+    from textgrid import TextGrid
     ph_list = ph.split(" ")
     itvs = TextGrid.fromFile(tg_fn)[1]
     itvs_ = []

@@ -1,4 +1,4 @@
-# ROSVOT: Robust Singing Transcription and MIDI Extraction
+# ROSVOT: Robust Singing Voice Transcription and MIDI Extraction
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2405.09940)
 
@@ -13,13 +13,19 @@ ROSVOT is tested in **python3.9**, **torch 2.1.1**, **CUDA 11.8**. Experiences h
 ```shell
 conda create -n rosvot python==3.9
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-
 pip install tensorflow==2.9.0 tensorflow-estimator==2.9.0
 pip install tensorboardX==2.5
-
 pip install pyyaml matplotlib==3.5 pandas pyworld==0.2.12 librosa torchmetrics
 pip install mir_eval pretty_midi pyloudnorm scikit-image textgrid g2p_en npy_append_array einops webrtcvad
+export PYTHONPATH=.
+```
 
+The commands above are for training and redundant for inference. If you only use ROSVOT for inference, refer to the following commands:
+
+```shell
+conda create -n rosvot python==3.9
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install librosa tqdm matplotlib==3.5 pyyaml pretty_midi pyworld==0.2.12
 export PYTHONPATH=.
 ```
 
