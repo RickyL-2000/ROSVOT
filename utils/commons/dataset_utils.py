@@ -333,7 +333,7 @@ class BaseDataset(torch.utils.data.Dataset):
                 indices = indices[np.argsort(np.array(self._sizes)[indices], kind='mergesort')]
         else:
             indices = np.arange(len(self))
-        return indices
+        return indices.tolist()
 
     @property
     def num_workers(self):
