@@ -2,7 +2,7 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2405.09940)
 
-This is the official PyTorch implementation of [ROSVOT (ACL'24)](https://arxiv.org/abs/2405.09940), the first robust automatic singing voice transcription (AST) model that serves singing voice synthesis (SVS). We provide the original design and implementation of this method, along with the model weights. **We are still working on this project, feel free to create an issue if you find any problems.** 
+This is the official PyTorch implementation of [ROSVOT (ACL'24)](https://arxiv.org/abs/2405.09940), a robust automatic singing voice transcription (AST) model that serves singing voice synthesis (SVS). We provide the original design and implementation of this method, along with the model weights. **We are still working on this project, feel free to create an issue if you find any problems.** 
 
 > Note: This method still has plenty of rooms for improvement! Therefore, we are continuing to optimize it and will release version 2.0 in the near future. 
 
@@ -12,9 +12,9 @@ ROSVOT is tested in **python3.9**, **torch 2.1.1**, **CUDA 11.8**. Experiences h
 
 ```shell
 conda create -n rosvot python==3.9
+conda activate rosvot
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-pip install tensorflow==2.9.0 tensorflow-estimator==2.9.0
-pip install tensorboardX==2.5
+pip install tensorflow==2.9.0 tensorflow-estimator==2.9.0 tensorboardX==2.5
 pip install pyyaml matplotlib==3.5 pandas pyworld==0.2.12 librosa torchmetrics
 pip install mir_eval pretty_midi pyloudnorm scikit-image textgrid g2p_en npy_append_array einops webrtcvad
 export PYTHONPATH=.
@@ -24,6 +24,7 @@ The commands above are for training and redundant for inference. If you only use
 
 ```shell
 conda create -n rosvot python==3.9
+conda activate rosvot
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 pip install librosa tqdm matplotlib==3.5 pyyaml pretty_midi pyworld==0.2.12
 export PYTHONPATH=.
