@@ -571,7 +571,7 @@ class RosvotInferDataset(Dataset):
         return len(self.items)
 
     def ordered_indices(self):
-        return np.arange(len(self))
+        return (np.arange(len(self))).tolist()
 
     def num_tokens(self, idx):
         return self.sizes[idx]
