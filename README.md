@@ -2,7 +2,16 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2405.09940)
 
-This is the official PyTorch implementation of [ROSVOT (ACL'24)](https://arxiv.org/abs/2405.09940), a robust automatic singing voice transcription (AST) model that serves singing voice synthesis (SVS). We provide the original design and implementation of this method, along with the model weights. **We are still working on this project, feel free to create an issue if you find any problems.** 
+This is the official PyTorch implementation of [ROSVOT (ACL'24)](https://arxiv.org/abs/2405.09940), a robust automatic singing voice transcription (AST) model that serves singing voice synthesis (SVS). We provide the original design and implementation of this method, along with the model weights. **We are still working on this project, feel free to create an issue if you find any problem.** 
+
+## What ROSVOT can do
+
+1. **Automatically transcribe singing voices**, i.e., turn a waveform of singing voice into a sequence of note events, in the form of MIDI. 
+2. **Transcribe noisy or accompanied singing voices**. In practice, you may have to deal with noisy singing voices separated from songs or movies.  As a robust AST model, ROSVOT can work under noisy environments and even transcribe raw songs with accompaniments. 
+3. **Integrated note-word alignment**. If word boundaries are given (typically generated from [MFA](https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner) or other ASR/forced aligner tools), the output MIDI notes are aligned with word timestamps.
+4. **Multi-lingual processing**. The checkpoint we provided was trained with Mandarin datasets. However, we find that (mostly empirically) it works pretty well in other languages. Feel free to try different languages!
+5. **Bulk processing**. We provide parallel transcription with multiprocessing and batched inference. 
+6. **Memory-efficient transcription**. 
 
 > Note: This method still has plenty of rooms for improvement! Therefore, we are continuing to optimize it and will release version 2.0 in the near future. 
 
