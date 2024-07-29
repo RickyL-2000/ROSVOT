@@ -136,6 +136,11 @@ def parse_args():
         help='Save the plots of MIDI or not. '
     )
     parser.add_argument(
+        "--check_slur",
+        action='store_true',
+        help='Check appearances of slurs and print logs.'
+    )
+    parser.add_argument(
         "--no_save_midi",
         action='store_true',
         help="Don't save MIDI files. "
@@ -426,22 +431,28 @@ class RosvotInfer:
     def after_infer(self, results):
         d = {}
         slur_cnt = defaultdict(int)
+        n_skipped = 0
         for r in results:
+            if r is None:
+                if not self.args.verbose:
+                    print('A sample is skipped for some reasons. Turn on the --verbose flag for detailed logs.')
+                n_skipped += 1
+                continue
             d[r['item_name']] = r
             item_name, note2words = r['item_name'], r['note2words']
-            if note2words is not None:
+            if note2words is not None and self.args.check_slur:
                 _slur_cnt = check_slur_cnt(note2words)
                 for k in _slur_cnt:
                     slur_cnt[k] += _slur_cnt[k]
         slur_cnt = dict(sorted(slur_cnt.items(), key=lambda x: x[0]))
-        if not self.apply_rwbd:
+        if (not self.apply_rwbd) and self.args.check_slur:
             if len(slur_cnt) > 0:
                 print('| Statistics for slurs: there are averagely')
                 for k in slur_cnt:
                     print(f"  [{slur_cnt[k] / len(results):.3f}] instances of [{k}]-slur in each sample. | [{slur_cnt[k]}] instances in total.")
             else:
                 print('| No slurs detected.')
-        print(f"| Totally {len(d)} items saved")
+        print(f"| Totally {len(d)} items saved, {n_skipped} items skipped.")
         if not self.args.no_save_final_npy:
             np.save(safe_path(f'{self.work_dir}/notes.npy'), d, allow_pickle=True)
         return d

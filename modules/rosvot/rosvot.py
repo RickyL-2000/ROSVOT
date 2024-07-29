@@ -13,7 +13,7 @@ from modules.commons.conv import ResidualBlock, ConvBlocks
 from modules.commons.conformer.conformer import ConformerLayers
 from modules.rosvot.unet import Unet
 
-def regulate_boundary(bd_logits, threshold, min_gap=18, ref_bd=None, ref_bd_min_gap=8):
+def regulate_boundary(bd_logits, threshold, min_gap=18, ref_bd=None, ref_bd_min_gap=8, non_padding=None):
     # this doesn't preserve gradient
     device = bd_logits.device
     bd_logits = torch.sigmoid(bd_logits).data.cpu()
@@ -71,10 +71,15 @@ def regulate_boundary(bd_logits, threshold, min_gap=18, ref_bd=None, ref_bd_min_
             assert torch.sum(bd_res[i, ref_bd_i_js]) == len(ref_bd_i_js), \
                 f"{torch.sum(bd_res[i, ref_bd_i_js])} {len(ref_bd_i_js)}"
 
+    bd_res = bd_res.to(device)
+
     # force valid begin and end
     bd_res[:, 0] = 0
-    bd_res[:, -1] = 0
-    bd_res = bd_res.to(device)
+    if non_padding is not None:
+        for i in range(bd_res.shape[0]):
+            bd_res[i, sum(non_padding[i]) - 1:] = 0
+    else:
+        bd_res[:, -1] = 0
 
     return bd_res
 
@@ -223,7 +228,8 @@ class MidiExtractor(nn.Module):
         note_bd_logits = torch.clamp(note_bd_logits, min=-16., max=16.)
         ret['note_bd_logits'] = note_bd_logits  # [B, T]
         if note_bd is None or not train:
-            note_bd = regulate_boundary(note_bd_logits, self.note_bd_threshold, self.note_bd_min_gap, word_bd, self.note_bd_ref_min_gap)
+            note_bd = regulate_boundary(note_bd_logits, self.note_bd_threshold, self.note_bd_min_gap,
+                                        word_bd, self.note_bd_ref_min_gap, non_padding)
             ret['note_bd_pred'] = note_bd   # [B, T]
 
         # note pitch prediction
@@ -271,7 +277,8 @@ class WordbdExtractor(MidiExtractor):
         ret['word_bd_logits'] = word_bd_logits  # [B, T]
 
         if not train:
-            word_bd = regulate_boundary(word_bd_logits, self.word_bd_threshold, self.word_bd_min_gap)
+            word_bd = regulate_boundary(word_bd_logits, self.word_bd_threshold, self.word_bd_min_gap,
+                                        non_padding=non_padding)
             ret['word_bd_pred'] = word_bd   # [B, T]
 
         return ret
